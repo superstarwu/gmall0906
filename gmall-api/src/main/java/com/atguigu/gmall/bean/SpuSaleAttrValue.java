@@ -1,0 +1,58 @@
+package com.atguigu.gmall.bean;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import java.io.Serializable;
+
+public class SpuSaleAttrValue implements Serializable {
+    private static final long serialVersionUID = -341075696157073565L;
+
+    @Column
+    @Id
+    private String id;
+    private String spuId;
+    private String saleAttrId;
+    private String saleAttrValueName;
+
+    public SpuSaleAttrValue() {
+    }
+
+    public SpuSaleAttrValue(String id, String spuId, String saleAttrId, String saleAttrValueName) {
+        this.id = id;
+        this.spuId = spuId;
+        this.saleAttrId = saleAttrId;
+        this.saleAttrValueName = saleAttrValueName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSpuId() {
+        return spuId;
+    }
+
+    public void setSpuId(String spuId) {
+        this.spuId = spuId;
+    }
+
+    public String getSaleAttrId() {
+        return saleAttrId;
+    }
+
+    public void setSaleAttrId(String saleAttrId) {
+        this.saleAttrId = saleAttrId;
+    }
+
+    public String getSaleAttrValueName() {
+        return saleAttrValueName;
+    }
+
+    public void setSaleAttrValueName(String saleAttrValueName) {
+        this.saleAttrValueName = saleAttrValueName;
+    }
+}

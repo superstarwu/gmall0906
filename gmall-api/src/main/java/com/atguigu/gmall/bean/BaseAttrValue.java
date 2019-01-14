@@ -1,11 +1,17 @@
 package com.atguigu.gmall.bean;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.io.Serializable;
 
 public class BaseAttrValue implements Serializable {
 
     private static final long serialVersionUID = -3073708504838706788L;
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private String id;
     private String valueName;
     private String attrId;

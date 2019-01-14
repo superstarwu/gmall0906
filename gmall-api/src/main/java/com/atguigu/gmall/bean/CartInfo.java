@@ -1,10 +1,15 @@
 package com.atguigu.gmall.bean;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 public class CartInfo implements Serializable {
     private static final long serialVersionUID = -5520878168671886523L;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private String id;
     private String name;
 

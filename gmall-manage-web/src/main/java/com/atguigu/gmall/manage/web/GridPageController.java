@@ -1,10 +1,7 @@
 package com.atguigu.gmall.manage.web;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.atguigu.gmall.bean.BaseAttrInfo;
-import com.atguigu.gmall.bean.BaseCatalog1;
-import com.atguigu.gmall.bean.BaseCatalog2;
-import com.atguigu.gmall.bean.BaseCatalog3;
+import com.atguigu.gmall.bean.*;
 import com.atguigu.gmall.service.AttrService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,5 +41,13 @@ public class GridPageController {
     public List<BaseAttrInfo> getAttrInfo(String catalog3Id){
         List<BaseAttrInfo> baseAttrInfoList = attrService.getAttrInfo(catalog3Id);
       return  baseAttrInfoList;
+    }
+
+    @RequestMapping("saveAttr")
+    @ResponseBody
+    public String getAttrValue(BaseAttrInfo baseAttrInfo){
+      //  attrService.
+        attrService.saveAttrInfo(baseAttrInfo);
+        return "success";
     }
 }

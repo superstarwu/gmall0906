@@ -1,10 +1,15 @@
 package com.atguigu.gmall.bean;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 public class BaseCatalog3 implements Serializable {
     private static final long serialVersionUID = -4927640216542712007L;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private String id;
     private String name;
     private String catalog2Id;

@@ -1,10 +1,16 @@
 package com.atguigu.gmall.bean;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 public class UserAddress implements Serializable{
 
     private static final long serialVersionUID = -162875552457388452L;
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private String id;
     private String userAddress;
     private String userId;

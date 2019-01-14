@@ -15,4 +15,9 @@ public class ManageController {
     public String getGridPage(){
         return "gridpage";
     }
+
+    @RequestMapping("spuListPage")
+    public String getSpuListPage(){
+        return "spuListPage";
+    }
 }

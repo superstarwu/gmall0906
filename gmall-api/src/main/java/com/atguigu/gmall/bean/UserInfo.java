@@ -1,10 +1,16 @@
 package com.atguigu.gmall.bean;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 public class UserInfo implements Serializable{
 
     private static final long serialVersionUID = -4991676353943917160L;
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private String id;
     private String loginName;
     private String nickName;

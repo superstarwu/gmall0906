@@ -1,5 +1,8 @@
 package com.atguigu.gmall.bean;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
@@ -7,6 +10,8 @@ import java.util.List;
 public class OrderInfo implements Serializable {
     private static final long serialVersionUID = 8710785889422923958L;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private String id;
     private String consignee;
     private String consigneeTel;

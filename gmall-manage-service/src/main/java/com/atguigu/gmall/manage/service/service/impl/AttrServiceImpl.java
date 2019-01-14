@@ -1,14 +1,8 @@
 package com.atguigu.gmall.manage.service.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.atguigu.gmall.bean.BaseAttrInfo;
-import com.atguigu.gmall.bean.BaseCatalog1;
-import com.atguigu.gmall.bean.BaseCatalog2;
-import com.atguigu.gmall.bean.BaseCatalog3;
-import com.atguigu.gmall.manage.service.mapper.BaseAttrInfoMapper;
-import com.atguigu.gmall.manage.service.mapper.BaseCatalog1Mapper;
-import com.atguigu.gmall.manage.service.mapper.BaseCatalog2Mapper;
-import com.atguigu.gmall.manage.service.mapper.BaseCatalog3Mapper;
+import com.atguigu.gmall.bean.*;
+import com.atguigu.gmall.manage.service.mapper.*;
 import com.atguigu.gmall.service.AttrService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,6 +22,9 @@ public class AttrServiceImpl implements AttrService {
 
     @Autowired
     private BaseAttrInfoMapper baseAttrInfoMapper;
+
+    @Autowired
+    private BaseAttrValueMapper baseAttrValueMapper;
 
     @Override
     public List<BaseCatalog1> getCataLog1() {
@@ -53,6 +50,8 @@ public class AttrServiceImpl implements AttrService {
     public void updateBadeCataLog1(BaseCatalog1 baseCataLog1) {
 
     }
+
+
 
     @Override
     public List<BaseCatalog2> getCatalog2(String catalog1Id) {
@@ -113,5 +112,38 @@ public class AttrServiceImpl implements AttrService {
         BaseAttrInfo baseAttrInfo = new BaseAttrInfo();
         baseAttrInfo.setCatalog3Id(catalog3Id);
         return baseAttrInfoMapper.select(baseAttrInfo);
+    }
+
+    @Override
+    public void saveAttrInfo(BaseAttrInfo baseAttrInfo) {
+        baseAttrInfoMapper.insertSelective(baseAttrInfo);
+        //插入数据后返回主键
+        String attrId = baseAttrInfo.getId();
+        List<BaseAttrValue> baseAttrValues = baseAttrInfo.getAttrValueList();
+        for(BaseAttrValue baseAttrValue : baseAttrValues){
+            baseAttrValue.setAttrId(attrId);
+            baseAttrValueMapper.insertSelective(baseAttrValue);
+        }
+    }
+
+    @Override
+    public List<BaseAttrValue> getAttrValue(String attrId) {
+        return null;
+    }
+
+
+    @Override
+    public void saveAttrValue(BaseAttrValue baseAttrValue) {
+
+    }
+
+    @Override
+    public void updateAttrValue(BaseAttrValue baseAttrValue) {
+
+    }
+
+    @Override
+    public void deleteAttrValue(String id) {
+
     }
 }
