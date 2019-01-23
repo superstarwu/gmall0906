@@ -114,14 +114,32 @@ public class SpuServiceImpl implements SpuService {
     }
 
     @Override
-    public List<SpuImage> getSpuImageList(String id) {
-        return null;
+    public List<SpuImage> getSpuImageList(String spuId) {
+        SpuImage spuImage = new SpuImage();
+        spuImage.setSpuId(spuId);
+        return spuImageMapper.select(spuImage);
     }
 
     @Override
-    public List<SpuSaleAttr> getSpuSaleAttrList(String id) {
+    public List<SpuSaleAttr> getSpuSaleAttrList(String spuId) {
 
-        return null;
+        SpuSaleAttr spuSaleAttr = new SpuSaleAttr();
+        spuSaleAttr.setSpuId(spuId);
+        List<SpuSaleAttr> spuSaleAttrList = spuSaleAttrMapper.select(spuSaleAttr);
+        for(SpuSaleAttr spuSaleAttr1 : spuSaleAttrList){
+            SpuSaleAttrValue spuSaleAttrValue = new SpuSaleAttrValue();
+            spuSaleAttrValue.setSpuId(spuId);
+            spuSaleAttrValue.setSaleAttrId(spuSaleAttr1.getSaleAttrId());
+            List<SpuSaleAttrValue> spuSaleAttrValueList = spuSaleAttrValueMapper.select(spuSaleAttrValue);
+            spuSaleAttr1.setSpuSaleAttrValueList(spuSaleAttrValueList);
+        }
+        return spuSaleAttrList;
+    }
+
+    @Override
+    public List<SpuSaleAttr> getSpuAttrValueListCheckBySku(String spuId, String skuId) {
+
+        return spuSaleAttrMapper.selectSpuAttrValueListCheckBySku(spuId,skuId);
     }
 
 }

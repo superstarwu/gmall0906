@@ -22,7 +22,7 @@
         <a href="#" onclick="addSpuInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
         <a href="javascript:editSpuInfo();" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</a>
         <a href="javascript:removeSpuInfo();" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
-        <a href="javascript:addSkuInfo();" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">增加</a>
+        <a href="javascript:addSkuInfo();" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">增加sku</a>
         <a href="javascript:showSkuInfoList();" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">sku列表</a>
         </div>
         <div>
@@ -53,8 +53,30 @@
         </div>
     </div>
     <div th:include="spuInfoPage"></div>
+    <div th:include="skuListPage"></div>
+    <div th:include="skuInfoPage"></div>
 <script language="JavaScript">
-
+    function addSkuInfo() {
+        $("#sku_dlg").dialog("open");
+        var catalog3Id = $("#ctg3ForSpuList").combobox("getValue");
+        if(!catalog3Id){
+            catalog3Id='1';
+        }
+        //初始化skuinfo页面,平台属性
+        initAttrInfoGroup(catalog3Id);
+        var spu = $("#spulist_dg").datagrid("getSelected");
+        //alert(spu.id);
+        //初始化销售属性
+        initSpuSaleAttrGroup(spu.id);
+        //初始化图片属性
+        initSkuImgListDatagrid(spu.id);
+    }
+    
+    function showSkuInfoList() {
+        $("#skulist_dlg").dialog("open");
+        var spuInfo = $("#spulist_dg").datagrid("getSelected");
+        initSkuListDatagrid(spuInfo);
+    }
     function addSpuInfo() {
         $("#spu_dlg").dialog("open");
         //初始化spu的对话框
@@ -68,7 +90,6 @@
         $("#spulist_dg").datagrid({
             url:'spuList?catalog3Id=' + catalog3Id
         });
-        //alert("刷新spu列表的信息");
     }
 </script>
 </body>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:text="${hello}">hello html</div>
+    <div th:include="a::b"></div>
+    <div th:each="li:${list2}">
+        <div th:text="${li}"></div>
+    </div>
+    <div th:each="list:${list1}" th:text="${list}"></div>
+    <div th:if="1==1">该元素存在</div>
+    <div th:if="2==2">该元素不存在</div>
+    <div th:text="(1==0)?'该元素存在':'该元素不存在'"></div>
+    <div th:each="user:${list3}" th:text="${user.name}"></div>
+    <a th:href="'javascript:a(\'' + ${hello} + '\');'">调用函数</a>
+    <div th:text="${userInfo?.name}"></div>
+</body>
+<script language="JavaScript">
+    function a(hello){
+        alert("a()" + hello);
+    }
+</script>
+</html>

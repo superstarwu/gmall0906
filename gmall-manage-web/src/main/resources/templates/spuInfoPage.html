@@ -16,7 +16,9 @@
             <input id="description" name="description" class="easyui-textbox" data-options="multiline:true" style="width:500px;height:100px"/>
             <input id="spuId" name="spuId" type="hidden"/>
             <br/><br/>
+            <!---商品图片列表---->
             <table id="spuImgDg" class="easyui-datagrid" title="商品图片列表" data-options="singleSelect:true,method:'get',toolbar:'#spuImgTootbar'"></table>
+           <!---图片列表工具栏---->
             <div id="spuImgTootbar" style="padding:5px;height:auto">
                 <div style="margin-bottom:5px">
                     <a href="#" id="spuImgAdd" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加图片</a>
@@ -25,9 +27,11 @@
                 </div>
             </div>
             <br/><br/>
+            <!-----销售属性列表---->
         <table id="spuSaleAttrDg" class="easyui-datagrid" style="width:400px;height:250px"
                title="销售属性列表" data-options="singleSelect:true,method:'get',toolbar:'#spuSaleAttrTootbar'">
         </table>
+            <!---销售属性列表工具栏---->
             <div id="spuSaleAttrTootbar" style="padding:5px;height:auto">
                 <div style="margin-bottom:5px">
                     <a href="#" id="spuSaleAttrAddBtn" class="easyui-linkbutton" onclick="addSpuSaleAttr()" iconCls="icon-add" plain="true">添加销售属性</a>
@@ -49,18 +53,24 @@
         //初始化上传控件
         var spuImgUploader = WebUploader.create({
             auto:false,
-            swf:'webuploader/Uploader.swf',
+            //swf文件路径
+            swf:'/webuploader/Uploader.swf',
+            //文件接受路径
             server:'/fileUpload',
+            //选择文件的按钮
             pick:'#spuImgAdd',
+            //不压缩img,默认如果时jpeg，文件上传前会压缩一把再上传
             resize:false,
             //设定文件大小上限 2M
             fileSingleSizeLimit:2*1024*1024,
+            //可接受的文件类型
             accept: {
                 title: 'Images',
                 extensions: 'gif,jpg,jpeg,bmp,png',
                 mimeTypes: 'image/*'
             }
         });
+        //当用户选择了文件后，表格要进行增行
         spuImgUploader.on('fileQueued',function (file) {
             var row = {
                 id:file.id,
@@ -68,6 +78,7 @@
             }
             spuImgDg.datagrid('appendRow',row);
         });
+        //上传过程中，该进度会反复触发
         spuImgUploader.on('uploadProgress',function(file,percentage){
             var rowIndex = spuImgDg.datagrid('getRowIndex',file.id);
             var progessRow={progress:(percentage*100).toFixed(2)};
@@ -93,6 +104,7 @@
     }
     function addSpuSaleAttr(){
         $("#spuSaleAttr_dlg").dialog("open");
+        //初始化销售属性值的数据表格
         initSpuSaleAttrDlg();
     }
     function saveSpu(){
@@ -138,7 +150,7 @@
         //spu上传控件
         initUploader();
     }
-    function initSpuImgListDatagrid() {
+    function initSpuImgListDatagrid(){
         //alert("初始化spu图片列表");
         $("#spuImgDg").datagrid({
         idField:'id',
@@ -175,7 +187,7 @@
             ]],
             view:detailview,
             detailFormatter:function (rowIndex,rowData) {
-                return "<img src=" + rowData.imgUrl + "style='width:100px;height:100px;'>";
+                return "<img src=" + rowData.imgUrl + " style='width:100px;height:100px;'>";
             }
         });
     }

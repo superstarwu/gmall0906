@@ -2,6 +2,7 @@ package com.atguigu.gmall.bean;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 public class SpuSaleAttrValue implements Serializable {
@@ -13,15 +14,18 @@ public class SpuSaleAttrValue implements Serializable {
     private String spuId;
     private String saleAttrId;
     private String saleAttrValueName;
+    @Transient
+    private String isChecked;
 
     public SpuSaleAttrValue() {
     }
 
-    public SpuSaleAttrValue(String id, String spuId, String saleAttrId, String saleAttrValueName) {
+    public SpuSaleAttrValue(String id, String spuId, String saleAttrId, String saleAttrValueName, String isChecked) {
         this.id = id;
         this.spuId = spuId;
         this.saleAttrId = saleAttrId;
         this.saleAttrValueName = saleAttrValueName;
+        this.isChecked = isChecked;
     }
 
     public String getId() {
@@ -54,5 +58,13 @@ public class SpuSaleAttrValue implements Serializable {
 
     public void setSaleAttrValueName(String saleAttrValueName) {
         this.saleAttrValueName = saleAttrValueName;
+    }
+
+    public String getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(String isChecked) {
+        this.isChecked = isChecked;
     }
 }

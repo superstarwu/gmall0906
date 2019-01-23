@@ -1,32 +1,31 @@
 package com.atguigu.gmall.bean;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 
 public class BaseAttrValue implements Serializable {
 
     private static final long serialVersionUID = -3073708504838706788L;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @Column
     private String id;
+    @Column
     private String valueName;
+    @Column
     private String attrId;
-    private String isEnabled;
+//    @Column
+//    private String isEnabled;
     @Transient
     private String urlParam;
 
     public BaseAttrValue() {
     }
 
-    public BaseAttrValue(String id, String valueName, String attrId, String isEnabled, String urlParam) {
+    public BaseAttrValue(String id, String valueName, String attrId, String urlParam) {
         this.id = id;
         this.valueName = valueName;
         this.attrId = attrId;
-        this.isEnabled = isEnabled;
         this.urlParam = urlParam;
     }
 
@@ -52,14 +51,6 @@ public class BaseAttrValue implements Serializable {
 
     public void setAttrId(String attrId) {
         this.attrId = attrId;
-    }
-
-    public String getIsEnabled() {
-        return isEnabled;
-    }
-
-    public void setIsEnabled(String isEnabled) {
-        this.isEnabled = isEnabled;
     }
 
     public String getUrlParam() {

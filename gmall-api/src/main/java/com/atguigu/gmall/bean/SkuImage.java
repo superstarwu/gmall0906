@@ -11,31 +11,42 @@ public class SkuImage implements Serializable{
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    private Long skuId;
+    private String skuId;
 
     private String imgName;
 
     private String imgUrl;
 
-    private Long spuImgId;
+    private String spuImgId;
 
     private String isDefault;
 
-    public Long getId() {
+    public SkuImage() {
+    }
+
+    public SkuImage(String skuId, String imgName, String imgUrl, String spuImgId, String isDefault) {
+        this.skuId = skuId;
+        this.imgName = imgName;
+        this.imgUrl = imgUrl;
+        this.spuImgId = spuImgId;
+        this.isDefault = isDefault;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getSkuId() {
+    public String getSkuId() {
         return skuId;
     }
 
-    public void setSkuId(Long skuId) {
+    public void setSkuId(String skuId) {
         this.skuId = skuId;
     }
 
@@ -44,7 +55,7 @@ public class SkuImage implements Serializable{
     }
 
     public void setImgName(String imgName) {
-        this.imgName = imgName == null ? null : imgName.trim();
+        this.imgName = imgName;
     }
 
     public String getImgUrl() {
@@ -52,14 +63,14 @@ public class SkuImage implements Serializable{
     }
 
     public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl == null ? null : imgUrl.trim();
+        this.imgUrl = imgUrl;
     }
 
-    public Long getSpuImgId() {
+    public String getSpuImgId() {
         return spuImgId;
     }
 
-    public void setSpuImgId(Long spuImgId) {
+    public void setSpuImgId(String spuImgId) {
         this.spuImgId = spuImgId;
     }
 
@@ -68,6 +79,6 @@ public class SkuImage implements Serializable{
     }
 
     public void setIsDefault(String isDefault) {
-        this.isDefault = isDefault == null ? null : isDefault.trim();
+        this.isDefault = isDefault;
     }
 }

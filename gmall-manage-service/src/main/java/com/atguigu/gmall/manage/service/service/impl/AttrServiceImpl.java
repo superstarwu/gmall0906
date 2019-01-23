@@ -51,8 +51,6 @@ public class AttrServiceImpl implements AttrService {
 
     }
 
-
-
     @Override
     public List<BaseCatalog2> getCatalog2(String catalog1Id) {
         BaseCatalog2 baseCatalog2 = new BaseCatalog2();
@@ -74,19 +72,16 @@ public class AttrServiceImpl implements AttrService {
     public void deleteBaseCatalog2(String id) {
 
     }
-
     @Override
     public void updateBadeCatalog2(BaseCatalog2 baseCatalog2) {
 
     }
-
     @Override
     public List<BaseCatalog3> getCatalog3(String catalog2Id) {
         BaseCatalog3 baseCatalog3 = new BaseCatalog3();
         baseCatalog3.setCatalog2Id(catalog2Id);
         return baseCatalog3Mapper.select(baseCatalog3);
     }
-
     @Override
     public BaseCatalog3 getBaseCatalog3(String id) {
         return null;
@@ -111,7 +106,18 @@ public class AttrServiceImpl implements AttrService {
     public List<BaseAttrInfo> getAttrInfo(String catalog3Id) {
         BaseAttrInfo baseAttrInfo = new BaseAttrInfo();
         baseAttrInfo.setCatalog3Id(catalog3Id);
-        return baseAttrInfoMapper.select(baseAttrInfo);
+
+        //平台属性集合
+        List<BaseAttrInfo> baseAttrInfos = baseAttrInfoMapper.select(baseAttrInfo);
+        for(BaseAttrInfo baseAttrInfo1 : baseAttrInfos){
+           String attrId =  baseAttrInfo1.getId();
+           BaseAttrValue baseAttrValue = new BaseAttrValue();
+           baseAttrValue.setAttrId(attrId);
+           //平台属性值集合
+           List<BaseAttrValue> baseAttrValues = baseAttrValueMapper.select(baseAttrValue);
+           baseAttrInfo1.setAttrValueList(baseAttrValues);
+        }
+        return baseAttrInfos;
     }
 
     @Override
@@ -128,22 +134,51 @@ public class AttrServiceImpl implements AttrService {
 
     @Override
     public List<BaseAttrValue> getAttrValue(String attrId) {
-        return null;
+        BaseAttrValue baseAttrValue = new BaseAttrValue();
+        baseAttrValue.setAttrId(attrId);
+        return baseAttrValueMapper.select(baseAttrValue);
     }
-
-
     @Override
     public void saveAttrValue(BaseAttrValue baseAttrValue) {
 
     }
-
     @Override
     public void updateAttrValue(BaseAttrValue baseAttrValue) {
 
     }
-
     @Override
     public void deleteAttrValue(String id) {
 
+    }
+
+    @Override
+    public void updateAttrValueByInfo(BaseAttrInfo baseAttrInfo) {
+        String attrId = baseAttrInfo.getId();
+        List<BaseAttrValue> baseAttrValues = baseAttrInfo.getAttrValueList();
+        for(BaseAttrValue baseAttrValue : baseAttrValues){
+            baseAttrValueMapper.updateByPrimaryKeySelective(baseAttrValue);
+        }
+    }
+
+    @Override
+    public void deleteAttrInfo(String attrId) {
+        BaseAttrInfo baseAttrInfo = baseAttrInfoMapper.selectByPrimaryKey(attrId);
+        List<BaseAttrValue> baseAttrValues = baseAttrInfo.getAttrValueList();
+        for(BaseAttrValue baseAttrValue : baseAttrValues){
+            baseAttrValueMapper.delete(baseAttrValue);
+        }
+        baseAttrInfoMapper.delete(baseAttrInfo);
+    }
+
+    @Override
+    public List<BaseAttrInfo> getAttrInfoByValueIds(String join) {
+       List<BaseAttrInfo> baseAttrInfos = baseAttrInfoMapper.selectAttrInfoByValueIds(join);
+        return baseAttrInfos;
+    }
+
+    @Override
+    public BaseCatalog1 getBaseCatalog1ById(String catalog1Id) {
+
+        return baseCataLog1Mapper.selectBaseCatalog1List(catalog1Id);
     }
 }

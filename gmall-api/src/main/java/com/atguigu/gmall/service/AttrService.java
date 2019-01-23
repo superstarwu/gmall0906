@@ -48,4 +48,11 @@ public interface AttrService {
 
     void deleteAttrValue(String id);
 
+    void updateAttrValueByInfo(BaseAttrInfo baseAttrInfo);
+
+    void deleteAttrInfo(String attrId);
+
+    List<BaseAttrInfo> getAttrInfoByValueIds(String join);
+
+    BaseCatalog1 getBaseCatalog1ById(String catalog1Id);
 }

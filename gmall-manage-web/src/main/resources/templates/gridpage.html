@@ -50,28 +50,43 @@
     </div>
 
     <div id="dmg" class="easyui-dialog" title="编辑平台属性" style="width:500px;height:500px;"
-         data-options="buttons:'#bb',closed:true,iconCls:'icon-save',resizable:true,modal:true">
-        属性名称:<input id="attreName" class="easyui-textbox" data-options="iconCls:'icon-search'" style="width:300px">
+         data-options="buttons:'#ee',closed:true,iconCls:'icon-save',resizable:true,modal:true">
+        属性名称:<input id="attrValueName" name="attrValueName" type="text" class="easyui-textbox" data-options="iconCls:'icon-search'" style="width:300px">
         <br/><br/>
         <table id="dmg_av" class="easyui-datagrid" style="width:400px;height:250px"
                title="属性值列表">
         </table>
         <br/><br/>
     </div>
-
     <div id="bb">
         <a href="javascript:saveAttr();" class="easyui-linkbutton">保存</a>
         <a href="javascript:closeAttr();" class="easyui-linkbutton">关闭</a>
     </div>
+    <div id="ee">
+        <a href="javascript:saveEditAttr();" class="easyui-linkbutton">更新</a>
+        <a href="javascript:closeEditAttr();" class="easyui-linkbutton">关闭</a>
+    </div>
 
     <script language="JavaScript">
+        function removeAttrInfo() {
+           var attrInfo =  $("#dg").datagrid("getSelected");
+           var attrId = attrInfo.id;
+           $("#dg").datagrid({
+               url:'removeAttrInfo?attrId=' + attrId
+           });
+        }
         function editAttrInfo(){
             var catalog3Id = $("#ctg3forattrList").combobox("getValue");
             if (!catalog3Id) {
-                catalog3Id = '1';
+                return;
             }
             $("#dmg").dialog('open');
-            $("#dmg_av").dialog({
+            //var attrJson = {};
+            var attrInfo =  $("#dg").datagrid('getSelected');
+            var attrId = attrInfo.id;
+            var attrName = attrInfo.attrName;
+            $('#attrValueName').textbox('setValue',attrName);
+            $("#dmg_av").datagrid({
                 onDblClickRow:function(rowIndex,rowData){
                     //进入当前行的，valueName编辑状态
                     $("#dmg_av").datagrid("beginEdit",rowIndex);
@@ -80,30 +95,58 @@
                         $("#dmg_av").datagrid("endEdit",rowIndex);
                     });
                 },
-                columns:[[
-                    {field:'id',title:'属性Id',width:'40%'},
-                    {field:'valueName',title:'属性值名称',width:'60%',sortable:true,
-                        editor:{
-                            type:'validatebox',
-                            options:{required:true}
+                url: 'getAttrValueList?attrId=' + attrId,
+                columns: [[
+                    {field: 'id', title: '属性Id', width: '40%'},
+                    {
+                        field: 'valueName', title: '属性值名称', width: '60%', sortable: true,
+                        editor: {
+                            type: 'validatebox',
+                            options: {required: true}
                         }
                     }
                 ]],
-
                 toolbar: [{
                     iconCls: 'icon-edit',
-                    handler: function(){
+                    handler: function () {
                         //追加一个新的数据表格的行
-                        $("#dmg_av").datagrid('updateRow',{
-                            id:'',
-                            valueName: '请修改属性值'
+                        $("#dmg_av").datagrid('updateRow', {
+                            id: '',
+                            valueName: ''
                         });
                     }
                 }]
             });
+          //  var baseAttrValue = $("#dmg_av").datagrid('getSelected');
+        }
+        function saveEditAttr(){
+            var attrEditJSON = {};
+            var catalog3Id = $("#ctg3forattrList").combobox("getValue");
+            if(!catalog3Id){
+                catalog3Id = '1';
+            }
+            var row1 = $("#dg").datagrid('getSelected');
+            attrEditJSON["id"] = row1.id;
+//            var baseAttrValue = $("#dmg_av").datagrid('getSelected');
+//            var baseAttrValueId = baseAttrValue.id;
+//            attrEditJSON["valueName"] = baseAttrValue.valueName;
+            var rows = $("#dmg_av").datagrid("getRows");
+            $(rows).each(function(i,row){
+                attrEditJSON["attrValueList[" + i + "].id"] = row.id;
+                attrEditJSON["attrValueList[" + i + "].valueName"] = row.valueName;
+            });
+            $.post("saveEditAttr",attrEditJSON,function (data) {
+                //alert(data);
+                $("#dmg").dialog("close");
+                $("#dg").datagrid({
+                    url:'getAttrList?catalog3Id=' + catalog3Id
+                })
+            });
         }
         function closeAttr(){
             $("#dlg").dialog("close");
+        }
+        function closeEditAttr() {
             $("#dmg").dialog("close");
         }
         function saveAttr(){
@@ -134,13 +177,12 @@
                 return;
             }
             //进系统前先清空
-//            $("#attrId").val("");
-//            $("#attrName").textbox('clear');
-            // 初始化datagrid
-           // initAttrValueDatagrid();
-
+            $("#attrName").textbox('clear');
+            $("#dg_av").datagrid('loadData',{
+                total:0,rows:[]
+            });
+          //  $('#dg_av').datagrid({url:""});
             $("#dlg").dialog('open');
-
             //初始化平台属性值列表的数据表格
             $("#dg_av").datagrid({
                 onDblClickRow:function(rowIndex,rowData){

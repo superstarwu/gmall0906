@@ -50,4 +50,26 @@ public class GridPageController {
         attrService.saveAttrInfo(baseAttrInfo);
         return "success";
     }
+
+    @RequestMapping("getAttrValueList")
+    @ResponseBody
+    public List<BaseAttrValue> getAttrValueList(String attrId){
+
+        List<BaseAttrValue> baseAttrValues = attrService.getAttrValue(attrId);
+        return baseAttrValues;
+    }
+
+    @RequestMapping("saveEditAttr")
+    @ResponseBody
+    public String updateEditAttr(BaseAttrInfo baseAttrInfo){
+        attrService.updateAttrValueByInfo(baseAttrInfo);
+        return "success";
+    }
+
+    @RequestMapping("removeAttrInfo")
+    @ResponseBody
+    public String removeAttrInfo(String attrId){
+        attrService.deleteAttrInfo(attrId);
+        return "success";
+    }
 }

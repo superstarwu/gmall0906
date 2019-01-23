@@ -1,10 +1,9 @@
 package com.atguigu.gmall.bean;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 
 public class SkuInfo implements Serializable {
     private static final long serialVersionUID = 7570521952792141565L;
@@ -14,19 +13,24 @@ public class SkuInfo implements Serializable {
     @Id
     private String id;
     private String spuId;
-    private String price;
+    private BigDecimal price;
     private String skuName;
     private String skuDesc;
     private String weight;
     private String tmId;
     private String catalog3Id;
     private String skuDefaultImg;
-
+   @Transient
+    private List<SkuImage> skuImageList;
+    @Transient
+    private List<SkuAttrValue> skuAttrValueList;
+    @Transient
+    private List<SkuSaleAttrValue> skuSaleAttrValueList;
     public SkuInfo() {
+
     }
 
-    public SkuInfo(String id, String spuId, String price, String skuName, String skuDesc, String weight, String tmId, String catalog3Id, String skuDefaultImg) {
-        this.id = id;
+    public SkuInfo(String spuId, BigDecimal price, String skuName, String skuDesc, String weight, String tmId, String catalog3Id, String skuDefaultImg, List<SkuImage> skuImageList, List<SkuAttrValue> skuAttrValueList, List<SkuSaleAttrValue> skuSaleAttrValueList) {
         this.spuId = spuId;
         this.price = price;
         this.skuName = skuName;
@@ -35,6 +39,9 @@ public class SkuInfo implements Serializable {
         this.tmId = tmId;
         this.catalog3Id = catalog3Id;
         this.skuDefaultImg = skuDefaultImg;
+        this.skuImageList = skuImageList;
+        this.skuAttrValueList = skuAttrValueList;
+        this.skuSaleAttrValueList = skuSaleAttrValueList;
     }
 
     public String getId() {
@@ -53,11 +60,11 @@ public class SkuInfo implements Serializable {
         this.spuId = spuId;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -107,5 +114,29 @@ public class SkuInfo implements Serializable {
 
     public void setSkuDefaultImg(String skuDefaultImg) {
         this.skuDefaultImg = skuDefaultImg;
+    }
+
+    public List<SkuImage> getSkuImageList() {
+        return skuImageList;
+    }
+
+    public void setSkuImageList(List<SkuImage> skuImageList) {
+        this.skuImageList = skuImageList;
+    }
+
+    public List<SkuAttrValue> getSkuAttrValueList() {
+        return skuAttrValueList;
+    }
+
+    public void setSkuAttrValueList(List<SkuAttrValue> skuAttrValueList) {
+        this.skuAttrValueList = skuAttrValueList;
+    }
+
+    public List<SkuSaleAttrValue> getSkuSaleAttrValueList() {
+        return skuSaleAttrValueList;
+    }
+
+    public void setSkuSaleAttrValueList(List<SkuSaleAttrValue> skuSaleAttrValueList) {
+        this.skuSaleAttrValueList = skuSaleAttrValueList;
     }
 }
