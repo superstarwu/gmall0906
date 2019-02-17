@@ -1,10 +1,14 @@
 package com.atguigu.gmall.bean;
 
+import com.atguigu.gmall.bean.enums.PaymentWay;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class OrderInfo implements Serializable {
@@ -15,15 +19,15 @@ public class OrderInfo implements Serializable {
     private String id;
     private String consignee;
     private String consigneeTel;
-    private String totalAmount;
+    private BigDecimal totalAmount;
     private String orderStatus;
     private String userId;
-    private String paymentWay;
+    private PaymentWay paymentWay;
     private String deliveryAddress;
     private String orderComment;
     private String tradeBody;
-    private String createTime;
-    private String expireTime;
+    private Date createTime;
+    private Date expireTime;
     private String processStatus;
     private String trackingNo;
     private String parentOrderId;
@@ -34,31 +38,12 @@ public class OrderInfo implements Serializable {
     @Transient
     private List<OrderInfo> orderSubList;
 
-    public List<OrderDetail> getOrderDetailList() {
-        return orderDetailList;
-    }
-
-    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
-        this.orderDetailList = orderDetailList;
-    }
-
-    public List<OrderInfo> getOrderSubList() {
-        return orderSubList;
-    }
-
-    public void setOrderSubList(List<OrderInfo> orderSubList) {
-        this.orderSubList = orderSubList;
-    }
+    @Transient
+    private String wareId;
 
     public OrderInfo() {
     }
-
-    public OrderInfo(String id, String consignee, String consigneeTel,
-                     String totalAmount, String orderStatus, String userId,
-                     String paymentWay, String deliveryAddress, String orderComment,
-                     String tradeBody, String createTime, String expireTime, String processStatus,
-                     String trackingNo, String parentOrderId, String outTradeNo) {
-        this.id = id;
+    public OrderInfo(String consignee, String consigneeTel, BigDecimal totalAmount, String orderStatus, String userId, PaymentWay paymentWay, String deliveryAddress, String orderComment, String tradeBody, Date createTime, Date expireTime, String processStatus, String trackingNo, String parentOrderId, String outTradeNo, List<OrderDetail> orderDetailList, List<OrderInfo> orderSubList, String wareId) {
         this.consignee = consignee;
         this.consigneeTel = consigneeTel;
         this.totalAmount = totalAmount;
@@ -74,6 +59,9 @@ public class OrderInfo implements Serializable {
         this.trackingNo = trackingNo;
         this.parentOrderId = parentOrderId;
         this.outTradeNo = outTradeNo;
+        this.orderDetailList = orderDetailList;
+        this.orderSubList = orderSubList;
+        this.wareId = wareId;
     }
 
     public String getId() {
@@ -100,11 +88,11 @@ public class OrderInfo implements Serializable {
         this.consigneeTel = consigneeTel;
     }
 
-    public String getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(String totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -124,11 +112,11 @@ public class OrderInfo implements Serializable {
         this.userId = userId;
     }
 
-    public String getPaymentWay() {
+    public PaymentWay getPaymentWay() {
         return paymentWay;
     }
 
-    public void setPaymentWay(String paymentWay) {
+    public void setPaymentWay(PaymentWay paymentWay) {
         this.paymentWay = paymentWay;
     }
 
@@ -156,19 +144,19 @@ public class OrderInfo implements Serializable {
         this.tradeBody = tradeBody;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public String getExpireTime() {
+    public Date getExpireTime() {
         return expireTime;
     }
 
-    public void setExpireTime(String expireTime) {
+    public void setExpireTime(Date expireTime) {
         this.expireTime = expireTime;
     }
 
@@ -202,5 +190,29 @@ public class OrderInfo implements Serializable {
 
     public void setOutTradeNo(String outTradeNo) {
         this.outTradeNo = outTradeNo;
+    }
+
+    public List<OrderDetail> getOrderDetailList() {
+        return orderDetailList;
+    }
+
+    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
+        this.orderDetailList = orderDetailList;
+    }
+
+    public List<OrderInfo> getOrderSubList() {
+        return orderSubList;
+    }
+
+    public void setOrderSubList(List<OrderInfo> orderSubList) {
+        this.orderSubList = orderSubList;
+    }
+
+    public String getWareId() {
+        return wareId;
+    }
+
+    public void setWareId(String wareId) {
+        this.wareId = wareId;
     }
 }

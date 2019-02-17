@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,10 +72,54 @@ public class CartServiceImpl implements CartService{
         return cartInfos;
     }
 
+    @Override
+    public void addCartData(String userId, String listCartCookie) {
+        List<CartInfo> cartInfoFromDb = getCarInfoByUserId(userId);
+        List<CartInfo> cartInfosFromCookie = JSON.parseArray(listCartCookie, CartInfo.class);
+       // CartInfo cartInfo1 = new CartInfo();
+        for(CartInfo cartInfo : cartInfosFromCookie){
+            boolean b = if_new_cart(cartInfoFromDb,cartInfo);
+            if(b){
+                cartInfo.setUserId(userId);
+                cartInfoMapper.insertSelective(cartInfo);
+            }else{
+                for(CartInfo cartInfo1 : cartInfoFromDb){
+                    if(cartInfo.getSkuId().equals(cartInfo1.getSkuId())){
+                        cartInfo1.setSkuNum(cartInfo.getSkuNum() + cartInfo1.getSkuNum());
+                        cartInfo1.setCartPrice(cartInfo1.getSkuPrice().multiply(new BigDecimal(cartInfo1.getSkuNum())));
+                       // cartInfo1.setUserId(userId);
+                        cartInfoMapper.updateByPrimaryKeySelective(cartInfo1);
+                    }
+                }
+            }
+        }
+        flushCartCacheByUser(userId);
+    }
+
+    @Override
+    public void delCartInfoById(List<String> delCartIds) {
+        for(String cartId : delCartIds){
+            CartInfo cartInfo = new CartInfo();
+            cartInfo.setId(cartId);
+            cartInfoMapper.delete(cartInfo);
+        }
+    }
+
     public List<CartInfo> getCarInfoByUserId(String userId) {
         CartInfo cartInfo = new CartInfo();
         cartInfo.setUserId(userId);
         return cartInfoMapper.select(cartInfo);
+    }
+
+    public boolean if_new_cart(List<CartInfo> cartInfos,CartInfo cartInfo){
+        boolean b = true;
+        for(CartInfo cartInfo1 : cartInfos){
+            String skuId = cartInfo1.getSkuId();
+            if(skuId.equals(cartInfo.getSkuId())){
+                b = false;
+            }
+        }
+        return b;
     }
 
 }

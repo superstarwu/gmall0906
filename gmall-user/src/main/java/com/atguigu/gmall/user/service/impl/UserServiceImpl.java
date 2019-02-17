@@ -1,14 +1,17 @@
 package com.atguigu.gmall.user.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.bean.UserAddress;
 import com.atguigu.gmall.bean.UserInfo;
 import com.atguigu.gmall.service.UserService;
 import com.atguigu.gmall.user.mapper.UserAddressMapper;
 import com.atguigu.gmall.user.mapper.UserInfoMapper;
+import com.atguigu.gmall.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -18,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Autowired
     private UserAddressMapper userAddressMapper;
@@ -85,5 +91,33 @@ public class UserServiceImpl implements UserService {
     public void changeUserAddress(UserAddress userAddress) {
 
         userAddressMapper.updateByPrimaryKey(userAddress);
+    }
+
+    @Override
+    public UserInfo selectUser(UserInfo userInfo) {
+        //先查缓存中是否存在此用户，不存在再查数据库
+        Jedis jedis = redisUtil.getJedis();
+        String user = jedis.get("user:" + userInfo.getId() + ":info");
+        if(user!= null){
+            UserInfo userInfo1 = JSON.parseObject(user,UserInfo.class);
+          //  System.err.println(userInfo1.getNickName());
+            return userInfo1;
+        }
+        return userInfoMapper.selectOne(userInfo);
+    }
+
+    @Override
+    public void addUserCache(UserInfo userlogin) {
+       Jedis jedis = redisUtil.getJedis();
+       //设置用户缓存
+       jedis.setex("user:" + userlogin.getId() + ":info",60*60*24, JSON.toJSONString(userlogin));
+       jedis.close();
+    }
+
+    @Override
+    public List<UserAddress> getUserAddresses(String userId) {
+        UserAddress userAddress = new UserAddress();
+        userAddress.setUserId(userId);
+        return userAddressMapper.select(userAddress);
     }
 }

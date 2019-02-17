@@ -5,8 +5,11 @@ import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.annotations.LoginRequired;
 import com.atguigu.gmall.bean.CartInfo;
 import com.atguigu.gmall.bean.SkuInfo;
+import com.atguigu.gmall.bean.UserInfo;
 import com.atguigu.gmall.service.CartService;
 import com.atguigu.gmall.service.SkuService;
+import com.atguigu.gmall.service.UserService;
+import com.atguigu.gmall.util.ConstantClass;
 import com.atguigu.gmall.util.CookieUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -26,13 +29,10 @@ public class CartController {
     private SkuService skuService;
 
     @Reference
-    private CartService cartService;
+    private UserService userService;
 
-    @LoginRequired(isNeedLogin = true)
-    @RequestMapping("toTrade")
-    public String toTrade(HttpServletRequest request,HttpServletResponse response,ModelMap modelMap){
-        return "toTrade";
-    }
+    @Reference
+    private CartService cartService;
 
     @RequestMapping("firstindex")
     public String loginFirstIndex(){
@@ -42,12 +42,12 @@ public class CartController {
     @LoginRequired(isNeedLogin = false)
     @RequestMapping("addSkuNum")
     public String addSkuNum(CartInfo cartInfo,HttpServletResponse response,HttpServletRequest request,ModelMap modelMap){
-        String userId = "2";
+        String userId = (String)request.getAttribute("userId");
         List<CartInfo> cartInfos = new ArrayList<>();
         if(StringUtils.isNotBlank(userId)){
             cartInfos = cartService.getCartInfoFromCache(userId);
         }else{
-            String listCartInfoCookie = CookieUtil.getCookieValue(request,"listCartCookie",true);
+            String listCartInfoCookie = CookieUtil.getCookieValue(request, ConstantClass.COOKIENAME,true);
             cartInfos = JSON.parseArray(listCartInfoCookie,CartInfo.class);
         }
         for(CartInfo cartInfo1 : cartInfos){
@@ -59,7 +59,7 @@ public class CartController {
                     cartService.updateCartPrice(cartInfo1);
                     cartService.flushCartCacheByUser(userId);
                 }else {
-                    CookieUtil.setCookie(request,response,"listCartCookie",JSON.toJSONString(cartInfos),1000*60*60*24,true);
+                    CookieUtil.setCookie(request,response,ConstantClass.COOKIENAME,JSON.toJSONString(cartInfos),1000*60*60*24,true);
                 }
             }
         }
@@ -72,12 +72,12 @@ public class CartController {
     @LoginRequired(isNeedLogin = false)
     @RequestMapping("reduceSkuNum")
     public String reduceSkuNum(CartInfo cartInfo,HttpServletResponse response,HttpServletRequest request,ModelMap modelMap){
-        String userId = "2";
+        String userId = (String)request.getAttribute("userId");
         List<CartInfo> cartInfos = new ArrayList<>();
         if(StringUtils.isNotBlank(userId)){
             cartInfos = cartService.getCartInfoFromCache(userId);
         }else{
-            String listCartInfoCookie = CookieUtil.getCookieValue(request,"listCartCookie",true);
+            String listCartInfoCookie = CookieUtil.getCookieValue(request,ConstantClass.COOKIENAME,true);
             cartInfos = JSON.parseArray(listCartInfoCookie,CartInfo.class);
         }
         for(CartInfo cartInfo1 : cartInfos){
@@ -91,7 +91,7 @@ public class CartController {
                     cartService.updateCartPrice(cartInfo1);
                     cartService.flushCartCacheByUser(userId);
                 }else {
-                    CookieUtil.setCookie(request,response,"listCartCookie",JSON.toJSONString(cartInfos),1000*60*60*24,true);
+                    CookieUtil.setCookie(request,response,ConstantClass.COOKIENAME,JSON.toJSONString(cartInfos),1000*60*60*24,true);
                 }
             }
         }
@@ -104,12 +104,12 @@ public class CartController {
     @LoginRequired(isNeedLogin = false)
     @RequestMapping("checkCart")
     public String checkCart(CartInfo cartInfo,HttpServletRequest request, HttpServletResponse response, ModelMap modelMap){
-        String userId = "2";
+        String userId = (String)request.getAttribute("userId");
         List<CartInfo> cartInfos = new ArrayList<>();
         if(StringUtils.isNotBlank(userId)){
             cartInfos = cartService.getCartInfoFromCache(userId);
         }else{
-            String listCartInfoCookie = CookieUtil.getCookieValue(request,"listCartCookie",true);
+            String listCartInfoCookie = CookieUtil.getCookieValue(request,ConstantClass.COOKIENAME,true);
             cartInfos = JSON.parseArray(listCartInfoCookie,CartInfo.class);
         }
         //修改购物车的状态
@@ -120,7 +120,7 @@ public class CartController {
                     cartService.updateCartPrice(cartInfo1);
                     cartService.flushCartCacheByUser(userId);
                 }else{
-                    CookieUtil.setCookie(request,response,"listCartCookie",JSON.toJSONString(cartInfos),1000*60*60*24,true);
+                    CookieUtil.setCookie(request,response,ConstantClass.COOKIENAME,JSON.toJSONString(cartInfos),1000*60*60*24,true);
                 }
             }
         }
@@ -134,12 +134,14 @@ public class CartController {
     @LoginRequired(isNeedLogin = false)
     @RequestMapping("cartList")
     public String getCartList(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap){
-        String userId = "2";
+        String userId = (String)request.getAttribute("userId");
+        UserInfo userInfo1 = new UserInfo();
        List<CartInfo> cartInfos = new ArrayList<>();
        if(StringUtils.isNotBlank(userId)){
+           userInfo1 = userService.getUser(userId);
            cartInfos = cartService.getCartInfoFromCache(userId);
        }else {
-           String listCartCookie = CookieUtil.getCookieValue(request, "listCartCookie", true);
+           String listCartCookie = CookieUtil.getCookieValue(request, ConstantClass.COOKIENAME, true);
            if(StringUtils.isNotBlank(listCartCookie)){
                cartInfos = JSON.parseArray(listCartCookie,CartInfo.class);
            }
@@ -147,6 +149,10 @@ public class CartController {
        modelMap.put("cartList",cartInfos);
        BigDecimal b = getTotalPrice(cartInfos);
        modelMap.put("totalPrice",b);
+       if(userInfo1 != null){
+           modelMap.put("nickName",userInfo1.getNickName());
+       }
+
         return "cartList";
     }
 
@@ -164,7 +170,7 @@ public class CartController {
     @RequestMapping("addToCart")
     public String addToCart(HttpServletRequest request, HttpServletResponse response,String skuId,int num){
 
-        String userId = "2";
+        String userId = (String)request.getAttribute("userId");
         SkuInfo skuInfo = skuService.getSkuInfoBySkuId(skuId);
         CartInfo cartInfo = new CartInfo();
         cartInfo.setSkuId(skuId);
@@ -183,7 +189,7 @@ public class CartController {
         //购物车的添加逻辑
         if(StringUtils.isBlank(userId)){
             //用户没有登陆，操作cookie
-            String listCartCookieStr = CookieUtil.getCookieValue(request, "listCartCookie", true);
+            String listCartCookieStr = CookieUtil.getCookieValue(request, ConstantClass.COOKIENAME, true);
             cartInfos = JSON.parseArray(listCartCookieStr,CartInfo.class);
             if(StringUtils.isBlank(listCartCookieStr)){
                 cartInfos = new ArrayList<>();
@@ -206,7 +212,7 @@ public class CartController {
                 }
             }
             //覆盖浏览器的cookie
-            CookieUtil.setCookie(request,response,"listCartCookie",JSON.toJSONString(cartInfos),1000*60*60*24,true);
+            CookieUtil.setCookie(request,response,ConstantClass.COOKIENAME,JSON.toJSONString(cartInfos),1000*60*60*24,true);
         }else{
             //用户已经登陆，操作db
             CartInfo exists = new CartInfo();

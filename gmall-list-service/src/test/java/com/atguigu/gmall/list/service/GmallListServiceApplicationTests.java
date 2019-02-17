@@ -71,6 +71,7 @@ public class GmallListServiceApplicationTests {
 
 	@Test
 	public void contextLoad2(){
+
 		String catalog3Id = "1";
 		//获取skuInfo的数据
 		List<SkuInfo> skuInfoList = skuService.getSkuInfoListByCatalog3Id(catalog3Id);
@@ -97,7 +98,7 @@ public class GmallListServiceApplicationTests {
 
 //		TermQueryBuilder termQueryBuilder = new TermQueryBuilder(null,null);
 //		boolQueryBuilder.filter(termQueryBuilder);
-		MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder("skuName","外星人");
+		MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder("skuName","hjk");
 
 		boolQueryBuilder.must(matchQueryBuilder);
 		searchSourceBuilder.query(boolQueryBuilder);

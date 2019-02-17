@@ -20,6 +20,7 @@ public class ListController {
     @Reference
     private AttrService attrService;
 
+
     @RequestMapping("list.html")
     public String getIndex(SkuLsParam skuLsParam, ModelMap modelMap){
         //调用list查询服务

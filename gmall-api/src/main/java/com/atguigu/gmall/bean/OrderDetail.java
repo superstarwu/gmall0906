@@ -3,7 +3,9 @@ package com.atguigu.gmall.bean;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class OrderDetail implements Serializable {
     private static final long serialVersionUID = -4326230913545876815L;
@@ -15,20 +17,23 @@ public class OrderDetail implements Serializable {
     private String skuId;
     private String skuName;
     private String imgUrl;
-    private String orderPrice;
-    private String skuNum;
+    private BigDecimal orderPrice;
+    private Integer skuNum;
+
+    @Transient
+    private String hasStock;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(String id, String orderId, String skuId, String skuName, String imgUrl, String orderPrice, String skuNum) {
-        this.id = id;
+    public OrderDetail(String orderId, String skuId, String skuName, String imgUrl, BigDecimal orderPrice, Integer skuNum, String hasStock) {
         this.orderId = orderId;
         this.skuId = skuId;
         this.skuName = skuName;
         this.imgUrl = imgUrl;
         this.orderPrice = orderPrice;
         this.skuNum = skuNum;
+        this.hasStock = hasStock;
     }
 
     public String getId() {
@@ -71,19 +76,27 @@ public class OrderDetail implements Serializable {
         this.imgUrl = imgUrl;
     }
 
-    public String getOrderPrice() {
+    public BigDecimal getOrderPrice() {
         return orderPrice;
     }
 
-    public void setOrderPrice(String orderPrice) {
+    public void setOrderPrice(BigDecimal orderPrice) {
         this.orderPrice = orderPrice;
     }
 
-    public String getSkuNum() {
+    public Integer getSkuNum() {
         return skuNum;
     }
 
-    public void setSkuNum(String skuNum) {
+    public void setSkuNum(Integer skuNum) {
         this.skuNum = skuNum;
+    }
+
+    public String getHasStock() {
+        return hasStock;
+    }
+
+    public void setHasStock(String hasStock) {
+        this.hasStock = hasStock;
     }
 }

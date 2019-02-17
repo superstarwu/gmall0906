@@ -27,4 +27,10 @@ public interface UserService {
     void removeUserAddress(String id);
 
     void changeUserAddress(UserAddress userAddress);
+
+    UserInfo selectUser(UserInfo userInfo);
+
+    void addUserCache(UserInfo userlogin);
+
+    List<UserAddress> getUserAddresses(String userId);
 }

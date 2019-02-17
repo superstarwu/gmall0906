@@ -27,9 +27,6 @@ import java.util.Map;
 @Service
 public class ListServiceImpl implements ListService{
 
-//    @Autowired
-//    private SkuService skuService;
-
     @Autowired
     private JestClient jestClient;
 
@@ -70,6 +67,7 @@ public class ListServiceImpl implements ListService{
         }
         return skuLsInfos;
     }
+
 
     public String getMyDsl(SkuLsParam skuLsParam){
         //查询语句封装
@@ -115,4 +113,5 @@ public class ListServiceImpl implements ListService{
         searchSourceBuilder.aggregation(valueIdAggs);
         return searchSourceBuilder.toString();
     }
+
 }

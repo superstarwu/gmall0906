@@ -15,4 +15,8 @@ public interface CartService {
     void flushCartCacheByUser(String userId);
 
     List<CartInfo> getCartInfoFromCache(String userId);
+
+    void addCartData(String userId, String listCartCookie);
+
+    void delCartInfoById(List<String> delCartIds);
 }

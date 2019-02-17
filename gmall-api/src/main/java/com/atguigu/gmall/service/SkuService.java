@@ -19,4 +19,6 @@ public interface SkuService {
     List<SkuInfo> getSkuInfoListByCatalog3Id(String catalog3Id);
 
     SkuInfo getSkuInfoBySkuId(String skuId);
+
+    List<SkuInfo> getAllSkuInfo();
 }
