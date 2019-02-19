@@ -1,5 +1,6 @@
 package com.atguigu.gmall.service;
 
+import com.atguigu.gmall.bean.SkuAttrValue;
 import com.atguigu.gmall.bean.SkuInfo;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface SkuService {
     SkuInfo getSkuInfoBySkuId(String skuId);
 
     List<SkuInfo> getAllSkuInfo();
+
+    List<SkuAttrValue> getSkuAttrValueListBySkuId(SkuAttrValue skuAttrValue);
 }

@@ -128,7 +128,6 @@ public class ListController {
                 urlParam = urlParam + "&valueId=" +id;
             }
         }
-
         return urlParam;
     }
 }

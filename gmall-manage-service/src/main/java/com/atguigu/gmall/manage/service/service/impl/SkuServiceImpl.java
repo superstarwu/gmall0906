@@ -147,8 +147,29 @@ public class SkuServiceImpl implements SkuService{
         return skuInfoMapper.selectOne(skuInfo);
     }
 
+//    @Override
+//    public List<SkuInfo> getAllSkuInfo() {
+//        List<SkuInfo> skuInfoList1 = new ArrayList<>();
+//        List<SkuInfo> skuInfoList = skuInfoMapper.selectAll();
+//        for(SkuInfo skuInfo : skuInfoList){
+//            String skuId = skuInfo.getId();
+//            SkuAttrValue skuAttrValue = new SkuAttrValue();
+//            skuAttrValue.setSkuId(skuId);
+//          List<SkuAttrValue> skuAttrValueList =  skuAttrValueMapper.select(skuAttrValue);
+//          skuInfo.setSkuAttrValueList(skuAttrValueList);
+//          skuInfoList1.add(skuInfo);
+//        }
+//        return skuInfoList1;
+//    }
+
     @Override
     public List<SkuInfo> getAllSkuInfo() {
         return skuInfoMapper.selectAll();
+    }
+
+    @Override
+    public List<SkuAttrValue> getSkuAttrValueListBySkuId(SkuAttrValue skuAttrValue) {
+
+        return skuAttrValueMapper.select(skuAttrValue);
     }
 }
